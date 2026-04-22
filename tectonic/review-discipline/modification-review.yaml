@@ -1,0 +1,163 @@
+# spec: tectonic/review-discipline/modification-review
+kind: feature
+status: proposed
+parent: tectonic/review-discipline
+publishes:
+  - tectonic/review-discipline/modification-checklist (v0)
+  - tectonic/review-discipline/modification-record (filled per review)
+provenance:
+  - spec-formats-landscape.md
+  - tectonic-bootstrap.md
+  - survey of OpenSpec, Kiro, Spec Kit, ADR traditions, Kafka KIPs
+    (conversation)
+  - definition-review ratification session
+
+intent:
+  - claim: A change to an active spec that alters any claim's
+      meaning produces a Modification artifact, which is examined
+      by a named human reviewer against structural criteria, and
+      the reviewer records an approve-or-reject verdict with
+      rationale.
+    certainty: settled
+  - claim: Modification artifacts are not specs. Specs describe
+      things; modifications describe actions on things. The
+      two have different purposes and different schemas.
+    certainty: settled
+    note:
+      kind: trade-off
+      detail: The elegant alternative — modification-as-kind under
+        one unified spec schema — was considered and rejected.
+        Forcing modifications into spec plates either leaves fields
+        unpopulated (context, constraints) or distorts them
+        (verification becomes "the review happens"). The separate
+        schema is less recursive but more honest.
+  - claim: Cosmetic edits that preserve every claim's meaning do
+      not produce a Modification artifact and do not require
+      review. Author judgment determines cosmetic status; audit
+      is the backstop.
+    certainty: settled
+    note:
+      kind: known-exception
+      detail: This is the no-review floor. The honest test:
+        would a reader who behaved according to the spec before
+        the edit behave identically after? If yes, cosmetic. If
+        no, the edit merits a Modification artifact.
+
+context:
+  - fact: The spec format supports `last-modified-by:` pointers
+      at the claim level, allowing per-claim provenance without
+      inline history lists.
+    guaranteed_by: tectonic/spec-format
+    enforcement: convention
+  - fact: The modification artifact schema is published as a
+      Tectonic artifact (location and governance mechanism:
+      open question), defining fields target, rationale, delta,
+      propagation, status, provenance, predecessor.
+    guaranteed_by: tectonic/review-discipline/modification-review
+    enforcement: convention
+  - fact: Definition review is defined and ratified.
+      Modification review builds on its checklist structure and
+      shepherd role.
+    guaranteed_by: tectonic/review-discipline/definition-review
+    enforcement: convention
+  - fact: The graph edges (parent, sutures, use, inherited,
+      guaranteed_by, last-modified-by) give modifications a
+      mechanical way to compute propagation impact.
+    guaranteed_by: tectonic/spec-format
+    enforcement: convention
+
+constraints:
+  local:
+    - directive: Every non-cosmetic change to an active spec is
+        accompanied by a Modification artifact that is reviewed
+        and approved before the change is applied to the target
+        spec.
+      certainty: settled
+    - directive: Cosmetic edits — those that preserve every
+        claim's meaning, such that a reader who behaved according
+        to the spec before the edit would behave identically
+        after — do not produce a Modification artifact and do not
+        require review. Author judgment determines cosmetic
+        status; audit is the backstop.
+      certainty: settled
+    - directive: A Modification artifact declares its target spec,
+        describes the delta as ADDED/MODIFIED/REMOVED at the
+        claim level, records the rationale for the change, and
+        plans propagation (dirtied specs, notified specs).
+      certainty: settled
+    - directive: A Modification review classifies the change by
+        propagation impact — dirties N, notifies M — and the
+        reviewer confirms each dirtied descendant has a resolution
+        plan and each notified descendant has been flagged.
+      certainty: settled
+    - directive: When a modification's review reveals that a
+        parent spec must also be modified for the child to be
+        valid, the child modification blocks until the parent
+        modification is ready, and both are ratified together.
+        (Close-the-deal pattern; reverse propagation.)
+      certainty: settled
+    - directive: The Modification artifact persists after apply.
+        It does not archive. Its status transitions — proposed,
+        approved, applied, reverted, superseded — follow the same
+        lifecycle model as specs, with additions specific to
+        modifications (applied, reverted).
+      certainty: settled
+    - directive: When a modification applies, every claim it
+        ADDED or MODIFIED in the target spec receives a
+        `last-modified-by:` pointer to the applied Modification
+        artifact. Claims it REMOVED are gone from the current
+        spec; the removal is traceable via the artifact itself.
+      certainty: settled
+    - directive: Agent-assisted pre-pass review is permitted for
+        structural checks (delta well-formed, propagation graph
+        resolves, ADDED/MODIFIED/REMOVED classification is
+        consistent). Agent-only review is not permitted. Same
+        constraint as Definition review, same rationale.
+      certainty: settled
+    - directive: Issues raised by reviewers are classified as
+        DISCUSS (blocking) or COMMENT (advisory). Verdicts are
+        `approve`, `revise`, or `withdraw`. Every verdict and
+        every DISCUSS resolution is recorded in a Modification
+        review record artifact.
+      certainty: settled
+
+verification:
+  - grade: reviewable
+    claim: Every applied Modification artifact has a linked review
+      record identifying reviewer, date, artifact version, and
+      verdict.
+    review: audit on demand; spot-check quarterly
+  - grade: reviewable
+    claim: Every non-cosmetic change to an active spec has a
+      corresponding Modification artifact. Git-only changes to
+      active specs without a linked artifact are findings.
+    review: audit on demand
+  - grade: reviewable
+    claim: Every applied Modification artifact's claim-level
+      edits are reflected in the target spec's
+      `last-modified-by:` pointers.
+    review: audit on demand
+  - grade: reviewable
+    claim: Propagation plans match actual graph traversal. A
+      claim-level edit that should have dirtied three descendants
+      does, in fact, list three descendants in the propagation
+      plan.
+    review: spot-check quarterly
+  - grade: aspirational
+    claim: Authors classify cosmetic vs. non-cosmetic changes
+      honestly. Audits find low rates of substantive changes
+      smuggled in as cosmetic edits.
+    certainty: deferred
+    note:
+      kind: deferred-decision
+      detail: The no-review floor relies on author honesty with
+        audit as backstop. Whether audits actually catch misuse
+        is unknown until enough specs are mature and enough
+        audits have been run.
+
+plan:
+  status: drafting
+  approach: The modification review instrument is published as
+    tectonic/review-discipline/modification-checklist, versioned
+    separately. The shepherd selects checklist depth for the
+    modification's scope.

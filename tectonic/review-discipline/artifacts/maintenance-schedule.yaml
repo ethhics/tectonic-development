@@ -1,0 +1,13 @@
+# Artifact: Maintenance schedule
+# Derived from specs; not independently authored.
+
+entries:
+  - spec: <spec-identifier>
+    claim: <claim identifier>
+    cadence: <quarterly, annually, custom>
+    owner: <role or person>
+    last-checked: <date, or "never">
+    next-due: <date>
+    status: current | overdue | in-progress
+    # Records of individual checks live separately; this schedule
+    # is a live view of what's due, not a history.

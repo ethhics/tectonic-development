@@ -1,0 +1,32 @@
+# spec: tectonic/adoption-path
+kind: policy
+status: proposed
+parent: tectonic/methodology
+
+intent:
+  - claim: Teams can migrate from ad-hoc AI-assisted development to
+      Tectonic incrementally, without a big-bang rewrite.
+    certainty: working-assumption
+
+context:
+  - fact: Most teams starting this will have some combination of
+      CLAUDE.md, AGENTS.md, scattered design docs, and code comments
+      doing the work that specs will.
+    guaranteed_by: external:industry-practice
+    enforcement: none
+
+constraints:
+  local:
+    - directive: Adoption guidance must admit that small work should
+        stay small. Tectonic is not a replacement for good judgment
+        about when ceremony is worth paying for.
+      certainty: settled
+
+verification:
+  - grade: aspirational
+    claim: A team can adopt Tectonic on a single feature and have
+      that feature coexist with non-Tectonic work in the same repo.
+    certainty: deferred
+
+plan:
+  status: not-started

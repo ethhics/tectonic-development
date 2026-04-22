@@ -1,0 +1,79 @@
+# checklist: tectonic/review-discipline/implementation-checklist (v0)
+# Use during Implementation review of a Generation record.
+
+identification:
+  - Which spec is this implementation against, and at what version?
+  - Which Generation record is being reviewed?
+  - Who is the shepherd for this review?
+
+generator:
+  - Is the generator field populated? (Model + version,
+    human author, or mixed.)
+  - For kind: model — is the context-loaded field accurate?
+    What specs, policies, utilities, and ADRs were actually
+    in context during generation?
+  - For kind: human — is the author named?
+  - For kind: mixed — is the split described clearly enough
+    that a reviewer can tell which parts were generated
+    vs. hand-written?
+
+structural pre-pass (may be agent-assisted):
+  - Is every claim in the target spec's verification section
+    addressed in verification-results?
+  - Is every intent claim mapped in the coverage field?
+  - Is every generated file mapped in the scope field?
+  - Are all paths (output, test results) resolvable?
+
+executable verification:
+  - For each `grade: executable, blocking: true` claim: does
+    the named test pass? If any fail, halt — the review does
+    not proceed to human judgment until blocking tests pass.
+  - For each `grade: executable, blocking: false` claim:
+    is the pass/fail result recorded? Non-blocking failures
+    are noted but do not halt.
+
+reviewable verification (human attestation required):
+  - For each `grade: reviewable` claim: has the reviewer
+    read the relevant code and attested yes or no?
+  - Is the rationale sufficient for a future reader to
+    understand what was checked and how?
+
+aspirational verification:
+  - For each `grade: aspirational` claim: is it acknowledged
+    as unchecked, with an optional note on any informal
+    checking that was done?
+
+coverage (human check):
+  - Does every intent claim in the target spec map to code
+    that plausibly satisfies it?
+  - Any intent claims flagged as unsatisfied: is the reason
+    recorded and acceptable, or is this a finding?
+
+scope (human check):
+  - Any generated files that map to no claim: have they been
+    flagged as out-of-scope with a disposition (remove,
+    justify via modification, accept as finding)?
+  - Is scope creep present? Code that satisfies no claim but
+    that the generator produced anyway?
+
+spot-check (irreducibly human):
+  - Has the reviewer selected at least one claim — by risk,
+    complexity, or judgment — and read the code critically
+    against that claim?
+  - What did the reviewer find? (Recorded whether the
+    finding was nothing, something, or ambiguous.)
+  - Is the selection reason recorded?
+
+honesty:
+  - Is there any claim whose verification result feels too
+    clean? A passing test that doesn't really exercise the
+    claim, a reviewable attestation with thin rationale?
+  - Is anything in the record contradicted by what the
+    reviewer actually observed?
+
+closeout:
+  - DISCUSS items, COMMENT items, verdict
+    (approve / revise / withdraw).
+  - If approved: the Generation record transitions to
+    applied, linked from the target spec.
+  - Shepherd confirms DISCUSS items resolved before applying.

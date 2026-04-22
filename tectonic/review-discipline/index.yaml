@@ -1,0 +1,41 @@
+# spec: tectonic/review-discipline
+kind: feature
+status: active
+parent: tectonic/methodology
+
+intent:
+  - claim: A named, teachable set of practices exists for reading
+      generated code critically and for reviewing specs against their
+      claims.
+    certainty: working-assumption
+    note:
+      kind: deferred-decision
+      detail: Promoted from "nice outcome artifact" to "known
+        dependency" during spec-format stress-testing. The format
+        writes checks this discipline has to cash — reviewable
+        verifications, aspirational promotion, limitation reviews,
+        notified-spec triage — and none of it exists yet.
+
+context:
+  - fact: The spec format repeatedly leans on "a reviewer decides"
+      without specifying what the reviewer's method is.
+    guaranteed_by: tectonic/spec-format
+    enforcement: none
+
+constraints:
+  - directive: A Spec Shepherd is assigned for every review,
+      accountable for the review occurring and being recorded.
+    certainty: settled
+
+verification:
+  - grade: aspirational
+    claim: Reviewers trained in the discipline produce consistent
+      judgments on the same spec.
+    certainty: deferred
+
+plan:
+  status: not-started
+  approach: begin after the spec format stabilizes further; draft
+    protocols for the specific review types the format already names
+    (external-context cadence, aspirational promotion, limitation
+    review, notification triage)

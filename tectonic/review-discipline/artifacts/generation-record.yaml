@@ -1,0 +1,49 @@
+# Artifact: Generation record
+# Schema published by tectonic/review-discipline/implementation-review
+
+target: <spec-identifier>
+status: proposed | approved | applied | superseded | invalidated
+predecessor: <prior generation record for this spec, if any>
+
+generator:
+  kind: model | human | mixed
+  # For kind: model — what model, version, orchestration framework,
+  # prompting approach. For kind: human — the author(s). For kind:
+  # mixed — both, with brief description of the split.
+
+context-loaded:
+  - <specs, policies, utilities, ADRs, checklists that were in
+     the generator's context during production>
+
+output:
+  - <paths to generated code, organized by claim if useful>
+
+verification-results:
+  - claim: <claim identifier in target spec>
+    grade: executable | reviewable | aspirational
+    result:
+      # For executable: pass | fail, link to test output, blocking status
+      # For reviewable: attestation yes | no, reviewer, rationale
+      # For aspirational: acknowledged-unchecked, optionally with a
+      #   note on whether informal checking was done
+
+coverage:
+  # Every intent claim in the target spec maps here.
+  - claim: <claim identifier>
+    satisfied-by: <code path(s)>
+    # Or: unsatisfied, with a reason. Unsatisfied claims block
+    # approval unless explicitly carved out.
+
+scope:
+  # Every generated file maps here.
+  - file: <path>
+    satisfies-claims: [<claim identifiers>]
+    # Or: out-of-scope, with a disposition (remove, justify via
+    # modification, accept as finding).
+
+spot-checks:
+  - claim: <claim identifier>
+    reason-for-selection: <why this claim; risk, complexity,
+      gut feeling>
+    finding: <what the reviewer observed when reading critically>
+    # Multiple spot-checks allowed; one is the floor.

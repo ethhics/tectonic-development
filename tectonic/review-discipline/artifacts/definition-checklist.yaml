@@ -1,0 +1,38 @@
+#checklist: tectonic/review-discipline/definition-checklist (v0)
+# Use during Definition review of a spec.
+
+intent:
+    - Does each claim describe an outcome, not an
+    implementation?
+    - Is every `certainty: settled` actually settled — no open
+    stakeholder disagreement, no unresolved design question?
+context:
+    - Does every `external:` entry name a review cadence, or
+    explicitly accept being unmonitored?
+    - Is every `guaranteed_by: given` a true primordial, or is
+    it a convenient assumption?
+constraints:
+    - For each local directive: would we actually pull the plug
+    if it couldn't be satisfied?
+    - Does the inherited set correspond to real, currently-active
+    parent specs?
+verification:
+    - Does every intent claim have at least one verification
+    entry?
+    - For each `grade: aspirational`: is it honestly
+    aspirational, or a reviewable claim missing its protocol?
+    - For each `blocking: false`: would splitting into a
+    blocking-settled claim plus a non-blocking-aspirational
+    claim be clearer?
+honesty valves:
+    - For each `enforcement: none`: is there a named review
+    cadence, or explicit acceptance that nothing catches it?
+    - For each `note:` with a `review:` trigger: is the trigger
+    plausible and does an owner exist for it?
+graph:
+    - Do parent, sutures, use, and provenance all resolve?
+    - If this spec adds constraints descendants will inherit,
+    has notification been planned?
+closeout:
+    - Write-up: DISCUSS items, COMMENT items, verdict.
+    - Shepherd confirms DISCUSS items resolved before advancing.

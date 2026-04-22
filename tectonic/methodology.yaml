@@ -1,0 +1,82 @@
+# spec: tectonic/methodology
+kind: feature
+status: active
+provenance:
+  - tectonic-development.md
+  - spec-formats-landscape.md
+  - the working sessions that produced both
+
+intent:
+  - claim: Teams building software with AI agents can produce reliable,
+      reviewable, maintainable work at scale.
+    certainty: settled
+  - claim: The valuable human skills are deciding what to build and
+      verifying what was built; the middle delegates downward.
+    certainty: settled
+  - claim: Context, specifications, and verification are assets, not tax.
+    certainty: settled
+  - claim: The methodology will be meaningfully obsolete within a few
+      years; its job is to be useful now and honestly superseded later.
+    certainty: settled
+    note:
+      kind: trade-off
+      detail: Optimizing for the 2026 moment over longevity. A
+        different methodology would invest in being durable; this one
+        invests in being right for now.
+
+context:
+  - fact: AI coding agents are the dominant generators of software
+      in scope for this methodology.
+    guaranteed_by: given
+    enforcement: none
+    note:
+      kind: limitation
+      detail: If the generator/reviewer relationship inverts again —
+        humans regaining the generation role, or agents becoming
+        reliable enough not to need review — the methodology's
+        premises fail.
+  - fact: Agents are confident confabulators whose output requires
+      verification.
+    guaranteed_by: given
+    enforcement: none
+
+constraints:
+  local:
+    - directive: The methodology must be falsifiable. Claims should
+        be stated sharply enough that they can be wrong.
+      certainty: settled
+    - directive: The methodology must not accrete ceremony. Every
+        primitive must earn its place by solving a problem that
+        comments or convention could not.
+      certainty: settled
+    - directive: The methodology references external traditions
+        (ADRs, RFCs, formal methods) rather than subsuming them.
+      certainty: settled
+
+verification:
+  - grade: reviewable
+    claim: Practitioners using Tectonic produce specs that reviewers
+      can evaluate without needing to read implementation code first.
+    review: when a team has used the methodology for ≥3 months
+  - grade: aspirational
+    claim: Tectonic reduces AI-generated defect rates compared to
+      unstructured prompting at the same scale of work.
+    certainty: deferred
+    note:
+      kind: deferred-decision
+      detail: No measurement framework exists yet. Asserting this
+        without instrumentation would be exactly the overclaim the
+        methodology warns against.
+  - grade: aspirational
+    claim: Specs written in this format age better than ad-hoc docs
+      in adjacent methodologies.
+    certainty: deferred
+  - grade: reviewable
+    claim: The methodology can describe itself. (This document.)
+    review: on each major revision to the format
+
+plan:
+  status: ongoing
+  approach: iterate the format against real examples; codify the
+    review discipline when the format stops moving
+  next: codify review discipline; instrument the aspirational claims

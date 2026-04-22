@@ -1,0 +1,151 @@
+# spec: tectonic/review-discipline/definition-review
+kind: feature
+status: active
+parent: tectonic/review-discipline
+provenance:
+  - spec-formats-landscape.md
+  - tectonic-bootstrap.md
+  - RFC 4858 (shepherd role; shepherd write-up pattern;
+    DISCUSS vs COMMENT distinction)
+  - survey of Tessl, Kiro, Spec Kit, OpenSpec (conversation)
+publishes:
+  - tectonic/review-discipline/definition-checklist (v0)
+
+intent:
+  - claim: A spec that has completed Definition review has been
+      examined by a named human reviewer against its structural
+      claims, and the reviewer has recorded an approve-or-reject
+      verdict with rationale.
+    certainty: settled
+  - claim: Definition review is the quality gate between
+      inspirational and canonical. A spec cannot reach status
+      `active` without it.
+    certainty: settled
+  - claim: The review is proportional to the spec. A three-line
+      thin spec gets a checklist-level review; a load-bearing
+      top-level spec gets a structured write-up.
+    certainty: working-assumption
+    note:
+      kind: deferred-decision
+      detail: Sharp rules for depth-by-kind don't exist yet.
+        The floor is "a human approved and left a trace." The
+        ceiling will come from experience.
+  - claim: Every honesty valve the spec uses — `enforcement: none`,
+      `grade: aspirational`, `blocking: false`, `note:` with
+      a review trigger — is individually examined by the reviewer
+      and resolved or explicitly accepted.
+    certainty: settled
+    note:
+      kind: trade-off
+      detail: This is the load-bearing commitment of the whole
+        review discipline. If valves aren't examined, they rot
+        into decoration. If they are, review scales with how
+        much honesty-about-unknowns the spec declares. Accepted
+        because the alternative hollows out the format's
+        epistemic claims.
+
+context:
+  - fact: The spec format defines the plates, the graph edges,
+      and the honesty valves that this review examines.
+    guaranteed_by: tectonic/spec-format
+    enforcement: convention
+  - fact: A Spec Shepherd role exists, accountable for the
+      review occurring and being recorded.
+    guaranteed_by: tectonic/review-discipline
+    enforcement: convention
+  - fact: Reviewers have access to parent specs, sutured
+      siblings, and referenced ADRs when conducting the review.
+    guaranteed_by: given
+    enforcement: none
+
+constraints:
+  local:
+    - directive: At least one human reviewer, who is not the
+        spec author, must approve a spec before its status
+        changes from `proposed` to `active`.
+      certainty: settled
+      note:
+        kind: limitation
+        detail: For solo developers or teams of one, the
+          reviewer-not-author rule cannot be satisfied. The
+          minimum honest alternative is a time-separated
+          self-review — author sets the spec aside, returns
+          after a defined interval, and reviews as if unfamiliar.
+          This is weaker than peer review; the limitation is
+          acknowledged rather than papered over.
+    - directive: Agent-assisted pre-pass review is permitted and
+        encouraged for structural checks. Agent-only review is
+        not permitted.
+      certainty: settled
+      note:
+        kind: trade-off
+        detail: Agents are well suited to checking "every claim
+          has an ID," "every external: has a review trigger,"
+          "the graph resolves." They are not suited to the
+          approval judgment. Using them for the first is a
+          force multiplier; using them for the second reinstates
+          the confident-confabulator problem the methodology
+          exists to escape.
+    - directive: Issues raised by reviewers are classified as
+        DISCUSS (blocking; must be resolved before status change)
+        or COMMENT (advisory; author decides whether to address).
+        Every DISCUSS resolution is recorded.
+      certainty: settled
+    - directive: Review verdicts are one of `approve`, `revise`,
+        or `withdraw`. `revise` is a temporary rejection pending
+        author changes; `withdraw` is a permanent rejection and
+        terminates the spec's lifecycle. Every verdict is
+        recorded with rationale.
+      certainty: settled
+    - directive: The review produces a written record that
+        survives the review session and is linked from the spec
+        via provenance.
+      certainty: settled
+
+verification:
+  - grade: reviewable
+    claim: Every spec in status `active` has a linked review
+      record identifying reviewer, date, spec version, and verdict.
+    review: audit on demand; spot-check quarterly
+  - grade: reviewable
+    claim: Every honesty valve present in the spec is addressed
+      in the review record — either resolved or accepted with
+      written rationale.
+    review: spot-check quarterly
+  - grade: reviewable
+    claim: No spec reached `active` without at least one
+      human-authored approval (or, for solo-developer specs, a
+      recorded time-separated self-review).
+    review: audit on demand
+  - grade: reviewable
+    claim: Every spec with status `withdrawn` has a recorded
+      review verdict of `withdraw` with rationale.
+    review: audit on demand
+  - grade: aspirational
+    claim: Review ceremony is proportional to spec ceremony.
+      Reviewer ceremony meaningfully above the spec's ceremony
+      level is rare and, when it occurs, is justified.
+    certainty: deferred
+    note:
+      kind: deferred-decision
+      detail: Unfalsifiable until we have enough reviews to
+        observe the distribution. Promoted from a constraint
+        to an aspirational claim because "proportional" is
+        directional, not operational.
+  - grade: aspirational
+    claim: Two independent reviewers produce substantively the
+      same verdict on the same spec.
+    certainty: deferred
+    note:
+      kind: deferred-decision
+      detail: Interrater reliability is the real test of whether
+        this discipline is teachable. Not measurable until the
+        discipline is codified enough to teach and enough specs
+        exist to review twice.
+
+plan:
+  status: drafting
+  approach: The review instrument is published as
+    tectonic/review-discipline/definition-checklist, versioned
+    separately. The shepherd selects checklist depth for the
+    spec's kind and status.

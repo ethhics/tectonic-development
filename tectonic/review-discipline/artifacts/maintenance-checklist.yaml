@@ -1,0 +1,39 @@
+# checklist: tectonic/review-discipline/maintenance-checklist (v0)
+# Use when conducting a scheduled maintenance check on a claim.
+
+identification:
+  - Which spec, which claim, which cadence triggered this check?
+  - When was this claim last checked? (For subsequent checks.)
+  - Who owns this check?
+
+the check itself:
+  - Does the claim still hold as stated?
+  - If the claim is an `external:` fact: has the external source
+    changed? (Vendor API, third-party schema, regulatory text, etc.)
+  - If the claim is an aspirational or reviewable verification:
+    is the review protocol still being followed, or has it lapsed?
+  - If the claim is an `enforcement: none` note: has anything
+    changed that would make the unenforced guarantee more or
+    less risky?
+  - Has any reality shifted that would make this claim, though
+    technically still true, no longer useful?
+
+broader observation:
+  - Looking at the whole spec, not just this claim: does the spec
+    still reflect what the system is trying to do? Or has it
+    drifted in ways no individual claim captures?
+  - If so, flag as a finding even if the specific check passes.
+
+outcome:
+  - Claim still holds: short attestation, dated, recorded.
+  - Claim no longer holds: trigger a Modification proposal to
+    the target spec, citing this check as provenance.
+  - Cadence itself is wrong (too frequent, too rare,
+    unsustainable): trigger a Modification to the cadence.
+  - Spec as a whole has drifted: trigger a broader Modification
+    or raise a concern with the spec's shepherd.
+
+closeout:
+  - Write-up: the check's finding, one to three lines plus
+    structural fields.
+  - Triggered artifacts (modifications, if any), linked.

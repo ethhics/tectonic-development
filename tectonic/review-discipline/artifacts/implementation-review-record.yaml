@@ -1,0 +1,52 @@
+# Artifact: Implementation review record
+# Schema published by tectonic/review-discipline/implementation-review
+# Filled in per Implementation review. One record per review of
+# one Generation record.
+
+review-of: <Generation record identifier>
+target-spec: <spec identifier and version at review time>
+
+reviewer:
+  name: <human reviewer>
+  shepherd: <shepherd for this review, if different>
+  date: <review date>
+  agent-assisted-prepass: <yes | no, with agent/model if yes>
+
+checklist-version: <e.g., implementation-checklist v0>
+
+walkthrough:
+  # A section per checklist group, recording what was found.
+  # The intent is that a future reader can reconstruct what
+  # the reviewer actually examined, not just the final verdict.
+  identification: <findings or attestation>
+  generator: <findings or attestation>
+  structural-prepass: <findings or attestation>
+  executable-verification: <per-claim pass/fail summary>
+  reviewable-verification: <per-claim attestation summary>
+  aspirational-verification: <per-claim acknowledgment>
+  coverage: <findings>
+  scope: <findings>
+  spot-check:
+    claim-selected: <which claim>
+    reason-for-selection: <why this one>
+    finding: <what the reviewer observed>
+  honesty: <findings>
+
+issues:
+  discuss:
+    - id: <DISCUSS-N>
+      item: <description>
+      resolution: <how it was resolved, or pending>
+  comment:
+    - id: <COMMENT-N>
+      item: <description>
+      author-response: <acknowledged | addressed | declined>
+
+verdict:
+  outcome: approve | revise | withdraw
+  rationale: <reviewer's reasoning for the verdict>
+  conditions: <any conditions attached to the verdict, if any>
+
+follow-up:
+  - <any triggered artifacts: modifications, future reviews,
+     maintenance findings, etc.>

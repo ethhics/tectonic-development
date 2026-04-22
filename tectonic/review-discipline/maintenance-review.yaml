@@ -1,0 +1,166 @@
+# spec: tectonic/review-discipline/maintenance-review
+kind: feature
+status: proposed
+parent: tectonic/review-discipline
+publishes:
+  - tectonic/review-discipline/maintenance-schedule-schema
+  - tectonic/review-discipline/maintenance-check-record
+    (filled per check)
+  - tectonic/review-discipline/maintenance-checklist (v0)
+provenance:
+  - survey of SOC 2 evidence review, documentation rot practice,
+    drift detection, assume-guarantee monitoring (conversation)
+  - tectonic-bootstrap.md
+  - implementation-review ratification session
+
+intent:
+  - claim: Claims in active specs that declare a review cadence —
+      `note: {review: ...}`, `grade: reviewable` with a review
+      field, `external:` context entries with review obligations —
+      are honored. Reviews happen on cadence, findings are
+      recorded, and action is taken when claims no longer hold.
+    certainty: settled
+  - claim: Maintenance is a discipline, not an artifact review.
+      It reviews the continuing validity of claims made in the
+      past, triggered by time rather than by someone producing
+      something. This makes it structurally different from
+      Definition, Modification, and Implementation review.
+    certainty: settled
+  - claim: Maintenance findings route into existing review types.
+      A finding that a claim no longer holds triggers Modification
+      review. A finding that an implementation no longer satisfies
+      the spec (because external reality has changed) triggers
+      Implementation review. Maintenance does not have its own
+      mechanism for changing specs or code.
+    certainty: settled
+  - claim: Reviewers exposed to a spec may flag concerns beyond
+      what the spec's declared cadences name — wholesale spec
+      drift, outdated framing, claims that are individually true
+      but no longer useful. The methodology relies on reviewer
+      judgment to catch what the schedule cannot.
+    certainty: working-assumption
+    note:
+      kind: trade-off
+      detail: Whole-spec drift is a real failure mode the schedule
+        cannot catch mechanically. Structured solutions (per-spec
+        cadences, rotation audits) were considered and deferred.
+        For now, we rely on the reviewer to raise a flag when
+        they see rot beyond the claim level. Aspirational.
+
+context:
+  - fact: Specs declare review cadences at the claim level through
+      `note: {review: ...}`, `grade: reviewable` review fields,
+      and `external:` context entries with review obligations.
+      These declarations are the input to the maintenance schedule.
+    guaranteed_by: tectonic/spec-format
+    enforcement: interface
+  - fact: Definition review verifies that declared cadences are
+      plausible and have ownership when the spec is ratified.
+      Maintenance review inherits those commitments; it does not
+      re-litigate whether a cadence should exist.
+    guaranteed_by: tectonic/review-discipline/definition-review
+    enforcement: convention
+  - fact: Modification review and Implementation review exist and
+      accept triggers from Maintenance findings. Maintenance does
+      not fix; it finds and routes.
+    guaranteed_by: tectonic/review-discipline/modification-review,
+      tectonic/review-discipline/implementation-review
+    enforcement: convention
+
+constraints:
+  local:
+    - directive: Every claim in an active spec that declares a
+        review cadence produces a scheduled maintenance check.
+        The schedule is derived from specs; it is not
+        independently authored.
+      certainty: settled
+    - directive: Each scheduled check has a named owner. The
+        shepherd of the originating spec is the default owner
+        unless another role is explicitly declared. Checks
+        without owners are a Maintenance finding against the
+        spec, not a Maintenance failure.
+      certainty: settled
+    - directive: A maintenance check produces one of three
+        outcomes, each with a recorded rationale: (a) claim
+        still holds — attested and dated; (b) claim no longer
+        holds — triggers a Modification proposal to the spec,
+        with the check record as provenance; (c) cadence itself
+        is wrong — triggers a Modification to the cadence
+        declaration (promotion, demotion, or removal).
+      certainty: settled
+    - directive: Maintenance checks produce a Maintenance check
+        record artifact that persists. The record names the
+        spec, the claim, the owner, the date, the outcome, and
+        any follow-on artifacts (modifications triggered).
+      certainty: settled
+    - directive: A missed check — past its due date with no
+        record — is itself a finding. The resolution is either
+        performing the check late (with the delay recorded) or
+        a Modification to the spec revising the cadence to
+        something sustainable.
+      certainty: settled
+    - directive: Maintenance is light on ceremony. A check that
+        confirms a claim still holds is a short attestation —
+        one to three lines plus the structural fields. Heavy
+        process belongs in the Modification or Implementation
+        review triggered by the finding, not in the check itself.
+      certainty: settled
+    - directive: Agent-assisted pre-pass is permitted for
+        structural checks — the schedule is current, checks are
+        assigned, records are well-formed. The substance of each
+        check (does the claim still hold) requires human
+        attestation. Agent-only Maintenance is not permitted.
+      certainty: settled
+
+verification:
+  - grade: reviewable
+    claim: The Maintenance schedule reflects all cadence-bearing
+      claims in active specs. A claim with `review: quarterly`
+      that does not appear on the schedule is a finding.
+    review: audit on demand
+  - grade: reviewable
+    claim: Every scheduled check has a named owner.
+    review: audit on demand
+  - grade: reviewable
+    claim: Completed Maintenance checks produce check records
+      with the required fields (spec, claim, owner, date,
+      outcome, rationale).
+    review: audit on demand
+  - grade: reviewable
+    claim: Findings that a claim no longer holds route to
+      Modification review, with the Maintenance check record
+      cited as provenance.
+    review: spot-check quarterly
+  - grade: aspirational
+    claim: Maintenance catches rot before it becomes a finding
+      someone else stumbles into — an external assumption that
+      silently drifted, an aspirational claim whose review
+      cadence lapsed, an enforcement level that was wishful.
+    certainty: deferred
+    note:
+      kind: deferred-decision
+      detail: The discipline's value is measured by findings
+        caught proactively vs. caught reactively. Unmeasurable
+        until enough specs have aged under the discipline to
+        see the difference.
+  - grade: aspirational
+    claim: Reviewers flag wholesale spec drift (claims
+      individually true but the spec as a whole no longer
+      useful) when they encounter it, without being explicitly
+      prompted.
+    certainty: deferred
+    note:
+      kind: deferred-decision
+      detail: Reliance on reviewer judgment for unstructured
+        drift. Genuinely an open question whether this works
+        or whether we need per-spec cadences. Revisit when
+        we have specs that are six months old or older.
+
+plan:
+  status: drafting
+  approach: The Maintenance schedule is derived from specs via
+    tooling (open question: which tooling, when). For v0, the
+    schedule may be assembled by hand, with each cadence-bearing
+    claim entered manually. The maintenance-checklist guides
+    individual checks. The schedule itself is an artifact, not
+    a spec — it tracks state rather than declaring intent.

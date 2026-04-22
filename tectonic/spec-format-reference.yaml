@@ -1,0 +1,755 @@
+# Artifact: tectonic/spec-format-reference
+# Published by: tectonic/spec-format
+# Version: 0
+#
+# This document is the normative definition of the Tectonic specification
+# format. It defines every field, every enumerated value, and every structural
+# rule a practitioner or tool needs to author, validate, or process a spec.
+#
+# It does not explain why the format takes the shape it does. That reasoning
+# lives in provenance/spec-formats-landscape.md.
+#
+# Usage notes:
+#   required     — the spec is malformed without it
+#   recommended  — definition review will flag absence as a DISCUSS unless
+#                  the reviewer accepts a stated reason
+#   optional     — present when needed; defaulted or absent otherwise
+
+# ─────────────────────────────────────────────────────────────────────────────
+# FLOOR
+# ─────────────────────────────────────────────────────────────────────────────
+
+floor:
+  description: >
+    A canonical spec is legal with three elements. Everything else earns its
+    place by resolving a real failure mode.
+  required-elements:
+    - One intent claim (intent: - claim: <text>)
+    - One verification entry of any grade
+  optional-at-floor: kind (defaults to feature when absent)
+  note: >
+    A spec with intent but no verification entry is inspirational, not
+    canonical. That distinction is the quality gate between the two statuses.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TOP-LEVEL FIELDS
+# ─────────────────────────────────────────────────────────────────────────────
+
+top-level-fields:
+
+  spec-identifier:
+    syntax: "# spec: <path/identifier>"
+    kind: file-header-comment
+    required: true
+    description: >
+      The first line of every spec file. Declares the canonical identifier.
+      Uses slash-separated path notation mirroring directory layout.
+      Examples: payments/refund-flow, tectonic/review-discipline/definition-review.
+      Not a YAML field — a comment the format reserves as the identifier line.
+
+  kind:
+    type: enum
+    required: false
+    default: feature
+    values:
+      feature: >
+        A unit of functionality, behavior, or methodology component.
+        The default and most common kind.
+      seam: >
+        A contract governing the interface between two sibling specs.
+        Intent is inherited from the parent feature by default (may be
+        declared as `intent: inherited` or left empty); context is pulled
+        from the sutured siblings; constraints and verification are
+        interface-specific. A seam spec is the child of the feature that
+        produced the siblings, not a peer of its sutures.
+      policy: >
+        Shared alignment — vocabulary, conventions, standards — that specs
+        reference via use:. Policies do not propagate constraints through
+        inheritance; they are adopted voluntarily. The distinction from a
+        parent spec: a policy is referenced, not inherited.
+      utility: >
+        A shared dependency with its own full set of plates, consumed by
+        sibling specs. Unlike a policy, a utility has runtime behavior.
+        A utility's changes dirty every spec that depends on it.
+
+  status:
+    type: enum
+    required: true
+    values:
+      inspirational: >
+        Written but not committed to. May become canonical; may be abandoned.
+        Not yet part of the spec graph. The floor does not apply — no
+        verification entry is required. Useful for capturing emerging intent
+        before definition review is warranted.
+      proposed: >
+        Intent to make canonical. Awaiting definition review. May be
+        referenced but is not load-bearing. Constraints declared here are
+        not yet binding on dependents.
+      active: >
+        Definition review complete. Canonical. Commitments are load-bearing.
+        Cannot reach active without a linked definition review record with
+        verdict: approve.
+      withdrawn: >
+        Permanently rejected or abandoned. Lifecycle terminated. The file
+        persists for traceability; the spec is no longer part of the graph.
+        Every withdrawn spec must have a review record with verdict: withdraw.
+
+  parent:
+    type: spec-identifier
+    required: false
+    description: >
+      The containing spec in the hierarchy. Constraints declared by the
+      parent are inherited by this spec. Intent flows downward through
+      the parent chain. A spec without a parent is a root spec.
+
+  sutures:
+    type: list of spec-identifiers
+    required: false
+    description: >
+      Horizontal peer relationships. Names the sibling specs this spec
+      shares a seam with. A seam spec (kind: seam) governing the interface
+      is typically the child of the feature that produced the siblings.
+      Changes to a sutured sibling notify (not dirty) this spec.
+
+  use:
+    type: list of spec-identifiers
+    required: false
+    description: >
+      Policies this spec aligns to. Referenced specs must be kind: policy.
+      Policy adoption is voluntary; policies do not propagate dirty signals.
+      Changes to a referenced policy notify (not dirty) this spec.
+
+  provenance:
+    type: list of references
+    required: false
+    description: >
+      External references — ADRs, RFCs, incident reports, research documents,
+      design sessions — that inform this spec. The "why we are here" trail.
+      Tectonic references external artifacts via provenance; it does not
+      subsume ADRs, RFCs, or issue trackers. An ADR supersession that this
+      spec's provenance points at triggers dirty propagation to this spec.
+
+  supersedes:
+    type: spec-identifier or versioned spec reference
+    required: false
+    description: >
+      The prior spec this one replaces. When set, the superseded spec
+      transitions to status: withdrawn and this spec inherits its position
+      in the graph. Used for major revisions warranting a clean break
+      rather than a Modification artifact.
+
+  publishes:
+    type: list of artifact identifiers
+    required: false
+    description: >
+      Artifacts this spec is responsible for maintaining — checklists,
+      schemas, reference documents, record templates. A spec's published
+      artifacts are notified when the spec changes and dirtied when the
+      spec changes in ways that affect the artifact's content.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# PLATES
+# ─────────────────────────────────────────────────────────────────────────────
+
+plates:
+
+  intent:
+    description: >
+      The why and the what-success-means. Describes outcomes, not
+      implementations. The deepest, slowest-moving plate. Intent changes
+      almost always dirty descendants.
+    required: true
+
+    fields:
+      claim:
+        type: string
+        required: true
+        description: >
+          An outcome asserted as a statement of desired-world fact, not a
+          description of how to achieve it. At least one claim is required
+          for a canonical spec.
+
+      id:
+        type: string
+        required: false
+        description: >
+          Optional short label for this claim. Used when referencing from
+          artifacts (generation records, modification records, maintenance
+          schedules). Must be unique within the intent plate. If absent,
+          the claim is referenced positionally — see claim-identifiers.
+
+      certainty:
+        type: enum
+        required: false
+        default: settled
+        values:
+          settled: >
+            No open stakeholder disagreement, no unresolved design question.
+            The claim is committed to.
+          working-assumption: >
+            Believed true; may change as evidence accumulates. Load-bearing
+            working-assumptions should have a plan for promotion or demotion.
+          deferred: >
+            Not yet resolved. The intent exists but specifics are unresolved.
+            Marks a placeholder claim.
+
+      note:
+        type: note-object
+        required: false
+        description: See note-structure section.
+
+  context:
+    description: >
+      What is assumed true for this spec to hold, distinguished by origin.
+      Context flows through subduction: when a parent spec guarantees a
+      constraint, that constraint becomes context for children once the
+      parent is active. Context is an assumption; a constraint is a directive.
+      Same underlying shape, different standing.
+    required: false
+
+    fields:
+      fact:
+        type: string
+        required: true
+        description: A statement assumed true by this spec.
+
+      id:
+        type: string
+        required: false
+        description: >
+          Optional short label. Referenced positionally as context.N if absent.
+
+      guaranteed_by:
+        type: origin
+        required: true
+        description: Who or what guarantees this fact. Three forms:
+        values:
+          given: >
+            Primordial. A fact about the world below the software stack
+            whose failure would mean something has gone wrong at a level
+            this methodology doesn't address. Reserved for stable environmental
+            facts (HTTP exists, the JVM runs our code). Does not require a
+            review cadence — if it fails, the problem is not the spec.
+          "<spec-identifier>": >
+            A parent or ancestor spec guarantees this fact as a constraint.
+            Records subduction: the parent's constraint became this spec's
+            context. If the parent changes the relevant claim, this context
+            fact is dirtied.
+          "external:<source>": >
+            An external system or authority controls this fact. Source is a
+            short identifier (external:stripe-api, external:industry-practice).
+            Marks honest vulnerability: external facts can change without
+            warning. External context entries should carry review cadences
+            (via note: with review:) unless explicitly accepted as unmonitored.
+
+      enforcement:
+        type: enum
+        required: true
+        description: >
+          What mechanism, if any, catches violations of this guarantee.
+          Distinct from verification grade: enforcement answers what catches
+          a failure in operation; verification answers how we confirm the
+          claim holds.
+        values:
+          interface: >
+            A type system, schema, or contract test catches violations at a
+            boundary. Violation is detectable at the seam.
+          runtime: >
+            The system fails loudly at runtime if the guarantee doesn't hold
+            (missing dependency, assertion failure, guard clause).
+          convention: >
+            A practice reviewers and practitioners follow. Violations are
+            possible; review is the backstop.
+          none: >
+            Nothing catches violations. The fact is stated and assumed.
+            An honesty valve: makes explicit that the spec is load-bearing
+            on something unguarded. Definition review must address every
+            enforcement: none entry — either assign a review cadence
+            (note: with review:) or record explicit acceptance.
+
+      note:
+        type: note-object
+        required: false
+
+  constraints:
+    description: >
+      Bindings this spec commits to — conditions that must hold, lines
+      that cannot be crossed. The test for a true constraint: would we
+      pull the plug if it couldn't be satisfied?
+
+      Sub-sections: local (declared here) and inherited (derived from the
+      parent chain; not authored in this spec). A spec's effective constraint
+      set is: local constraints + all constraints from every ancestor in
+      the parent chain.
+    required: false
+
+    sub-sections:
+      local:
+        description: Constraints declared by this spec.
+        fields:
+          directive:
+            type: string
+            required: true
+            description: The constraint, stated as a binding commitment.
+          id:
+            type: string
+            required: false
+            description: >
+              Optional short label. Referenced positionally as
+              constraints.local.N if absent.
+          certainty:
+            type: enum
+            required: false
+            default: settled
+            values:
+              settled: The constraint is firm.
+              working-assumption: >
+                Believed necessary; may be revised as practice matures.
+          note:
+            type: note-object
+            required: false
+
+      inherited:
+        description: >
+          Not authored here — derived from parent and ancestor specs.
+          A spec may also explicitly list policy specs (kind: policy) whose
+          constraints it adopts via the use: field at the top level.
+        open-question: >
+          The syntax for guarantee-vs-demand on constraints is not yet
+          resolved. Distinguishing a constraint this spec guarantees to
+          children from one it demands of them collectively has no dedicated
+          field. Currently, all local constraints are visible to children;
+          no per-constraint opt-out exists.
+
+  verification:
+    description: >
+      How we know the spec's intent is satisfied. Three grades, not one.
+      Graded verification is honest about what can actually be checked.
+      Every intent claim should have at least one verification entry.
+    required: true
+
+    fields:
+      grade:
+        type: enum
+        required: true
+        values:
+          executable: >
+            Mechanically checkable: a property test, scenario test, contract
+            test, or type check. Pass or fail is deterministic. The strongest
+            grade. Requires a test: field pointing at the mechanism.
+          reviewable: >
+            Human-decidable against a stated protocol. A named reviewer can
+            attest yes or no with rationale. Falsifiable but not automated.
+            Requires a review: field naming the cadence or trigger.
+          aspirational: >
+            Meant, but not verifiable with current tools or practice.
+            Honest acknowledgment of the gap. Aspirational verifications
+            should either carry a path to promotion or explicit acceptance
+            that they remain directional.
+
+      claim:
+        type: string
+        required: true
+        description: >
+          The verification statement. Written to be checkable against the
+          intent claim it addresses.
+
+      id:
+        type: string
+        required: false
+        description: >
+          Optional short label. Referenced positionally as verification.N
+          if absent.
+
+      blocking:
+        type: boolean
+        required: false
+        default: true
+        description: >
+          Whether failure of this verification halts review progress.
+
+          For executable verifications: blocking: true halts implementation
+          review before human judgment is sought; code cannot be considered
+          to satisfy the spec while this check fails.
+
+          For reviewable verifications: blocking: true makes a failing
+          attestation a DISCUSS (not a COMMENT).
+
+          Non-blocking (blocking: false): records failures without halting.
+
+          Smell: more than half of a spec's verifications being non-blocking
+          suggests the spec is over-aspirational or the designations need
+          review. Prefer splitting into a blocking settled claim for what's
+          required and a non-blocking or lower-grade claim for what's
+          nice-to-have.
+
+      test:
+        type: string or list of strings
+        required: when grade is executable
+        description: >
+          Path(s) to the test(s) that mechanically check this claim. Used
+          by implementation review to locate and run verification. An
+          executable claim without a test: pointer is a definition review
+          finding unless the checking mechanism is otherwise documented in
+          the claim text.
+
+      review:
+        type: string
+        required: when grade is reviewable
+        description: >
+          The cadence or event triggering this review. Examples: "quarterly",
+          "on each major revision", "audit on demand; spot-check quarterly".
+          This field is the input to the maintenance schedule: every
+          reviewable verification entry with a review: field produces a
+          scheduled maintenance check.
+
+      certainty:
+        type: enum
+        required: false
+        description: >
+          Used with grade: aspirational to mark deferred verifications.
+          Value: deferred — the verification exists but has no current
+          protocol. Signals honest incompleteness without removing the claim.
+
+      note:
+        type: note-object
+        required: false
+
+  plan:
+    description: >
+      Disposable. Describes current working approach, not canonical
+      commitments. Plans are rewritten freely. Changes to the plan plate
+      do not produce Modification artifacts and do not dirty descendants.
+    required: false
+
+    fields:
+      status:
+        type: enum
+        required: false
+        values:
+          not-started: Work on this spec's intent has not begun.
+          drafting: In active development.
+          stable-for-now: Not actively evolving; held until circumstances change.
+          ongoing: Continuously active (for evergreen specs).
+
+      approach:
+        type: string
+        required: false
+        description: Current working approach. Prose. Rewritten freely.
+
+      next:
+        type: string
+        required: false
+        description: Immediate next action or open question.
+
+      tasks:
+        type: list of task identifiers
+        required: false
+        description: >
+          Optional references to issue tracker items or task identifiers.
+          Not part of the canonical spec; listed here for convenience.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# NOTE STRUCTURE
+# ─────────────────────────────────────────────────────────────────────────────
+
+note-structure:
+  description: >
+    Notes are first-class caveats. They qualify claims, facts, and directives
+    without altering their content. Notes are part of the spec, not adjacent
+    comments. Definition review examines every note individually.
+
+  fields:
+    kind:
+      type: enum
+      required: true
+      values:
+        limitation: >
+          A known boundary on the claim's validity. States where the claim
+          stops holding without undermining it — scopes it.
+        trade-off: >
+          A deliberate choice with acknowledged costs. Names what was accepted
+          and what was given up. Keeps the reasoning inside the spec rather
+          than in adjacent ADRs.
+        known-exception: >
+          A named case where the claim does not apply. Carves out without
+          undermining. Should name who accepted the exception.
+        deferred-decision: >
+          A question not yet resolved. Marks the claim as carrying acknowledged
+          uncertainty the team has chosen not to resolve yet.
+
+    detail:
+      type: string
+      required: true
+      description: The note's content. Prose. Length tracks substance.
+
+    review:
+      type: string
+      required: false
+      description: >
+        Cadence or trigger for revisiting this note. Prevents notes from
+        becoming permanent deferrals. Definition review should flag
+        deferred-decision notes without a review: field unless the deferral
+        is explicitly indefinite.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CLAIM IDENTIFIERS
+# ─────────────────────────────────────────────────────────────────────────────
+
+claim-identifiers:
+  description: >
+    Every claim, fact, and directive is individually addressable for use
+    in artifacts (generation records, modification records, maintenance
+    schedules). The format mandates addressability; implementations choose
+    the mechanism. The standard convention:
+
+  explicit-ids:
+    description: >
+      If a claim carries an id: field, that ID is its canonical reference
+      within the spec. IDs must be unique within their plate. Recommended
+      for any spec with active modification history or many claims.
+    format: "<plate>.<id>"
+    examples:
+      - intent.refund-window
+      - verification.no-excess-refund
+      - constraints.local.append-only-log
+
+  positional-references:
+    description: >
+      When no explicit id: is present, the claim is referenced by plate
+      and 1-based position within that plate.
+    format: "<plate>.<N>"
+    examples:
+      - intent.1
+      - context.2
+      - constraints.local.1
+      - verification.3
+    caveat: >
+      Positional references are fragile: they shift when claims are added
+      or removed. Modifications that reorder or insert claims in specs with
+      downstream positional references should update affected artifacts, or
+      the spec should adopt explicit IDs before modification.
+
+  cross-spec-references:
+    description: >
+      When referencing a claim from another spec (in propagation plans,
+      guaranteed_by entries, etc.), prefix with the spec identifier.
+    format: "<spec-identifier>/<plate>.<id-or-N>"
+    examples:
+      - tectonic/methodology/intent.1
+      - payments/refund-flow/verification.no-excess-refund
+
+# ─────────────────────────────────────────────────────────────────────────────
+# GRAPH EDGES
+# ─────────────────────────────────────────────────────────────────────────────
+
+graph:
+  description: >
+    Specs connect through typed edges. The graph governs intent flow,
+    constraint inheritance, and propagation.
+
+  edges:
+    containment:
+      field: parent
+      direction: child → parent
+      description: >
+        The primary hierarchy. Intent flows down; constraints from the
+        parent are inherited by children. Dirty propagation follows
+        containment edges downward.
+
+    suture:
+      field: sutures
+      direction: bidirectional (peer)
+      description: >
+        Horizontal coupling between sibling specs. Changes to either
+        sutured sibling notify (not dirty) the other and any seam spec
+        governing their interface.
+
+    policy-reference:
+      field: use
+      direction: adopting spec → policy
+      description: >
+        A spec voluntarily adopts a policy. Changes to the policy notify
+        (not dirty) adopting specs.
+
+    subduction:
+      field: guaranteed_by (within context facts)
+      direction: context fact → guarantor
+      description: >
+        Links a context fact to its guarantor. When the guarantor changes
+        the relevant claim, this context fact is dirtied.
+
+    modification-pointer:
+      field: last-modified-by (on individual claims)
+      direction: claim → modification artifact
+      description: >
+        Applied by Modification review when a modification is applied to a
+        spec. Records per-claim provenance without maintaining inline history.
+        Absent on claims that have not been modified since initial ratification.
+        Value is a modification artifact identifier.
+
+    provenance-reference:
+      field: provenance
+      direction: spec → external artifact
+      description: >
+        Points at ADRs, RFCs, incident reports, or research documents. An
+        ADR supersession dirties every spec whose provenance references the
+        superseded ADR.
+
+  propagation:
+    description: >
+      When the graph changes, two grades of signal propagate. Collapsing
+      them destroys the mechanism: dirty must mean something or reviewers
+      stop treating it as consequential.
+
+    grades:
+      dirty:
+        meaning: >
+          A claim this spec depends on has changed. This spec may no longer
+          be satisfied. Must be reviewed. Code satisfying it transitions to
+          invalidated until a new Implementation review completes.
+        triggers:
+          - Change to an existing claim in a spec this spec depends on
+          - Parent intent change (dirties everything below)
+          - Supersession of an ADR referenced in this spec's provenance
+          - Change to a utility this spec depends on
+
+      notified:
+        meaning: >
+          Something changed upstream this spec might want to respond to.
+          The legitimate outcome of reviewing a notification is "doesn't
+          apply; no change needed" — recorded as a known-exception note
+          if worth preserving, or simply closed.
+        triggers:
+          - New claim added to a parent or ancestor spec
+          - New sibling spec added to the graph
+          - New policy adopted by a parent
+          - Change to a sutured sibling spec
+
+    rules:
+      - "Change to an existing claim → dirty every spec with an edge pointing at that claim."
+      - "New claim added to a spec → notify all descendants."
+      - "New spec added to the graph → notify its parent and declared siblings."
+      - "Top-level intent change → dirty everything below."
+      - "ADR supersession → dirty every spec whose provenance cites the superseded ADR."
+      - >
+        Rules are advisory: a reviewer at each hop decides whether the change
+        touches this spec's assumptions. The format enables the traversal;
+        the discipline decides when to truncate it.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# LIFECYCLE
+# ─────────────────────────────────────────────────────────────────────────────
+
+lifecycle:
+  status-transitions:
+    - from: inspirational
+      to: proposed
+      gate: Author decision to commit. No review required.
+    - from: proposed
+      to: active
+      gate: >
+        Definition review approved by at least one named human reviewer
+        (or, for solo-developer contexts, a recorded time-separated
+        self-review). A linked review record must exist before the
+        status change is applied.
+    - from: proposed
+      to: withdrawn
+      gate: Definition review verdict of withdraw, with rationale recorded.
+    - from: active
+      to: withdrawn
+      gate: >
+        Modification review that changes status, with strong rationale.
+        Rare. Active specs superseded by a newer spec transition via the
+        supersedes: field on the new spec, not by a status change here.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# HONESTY VALVES
+# ─────────────────────────────────────────────────────────────────────────────
+
+honesty-valves:
+  description: >
+    Honesty valves are format features that let specs express uncertainty
+    without pretending to certainty they don't have. They are not weaknesses;
+    they are epistemic commitments. Definition review examines every valve
+    individually. A spec where honesty valves go unexplained is a spec where
+    the format's epistemic claims are hollow.
+
+  valves:
+    - field: "enforcement: none"
+      implication: >
+        A context fact or constraint is stated but nothing catches violations.
+      definition-review-requirement: >
+        Must be addressed: either assign a review cadence (note: with review:)
+        or record explicit acceptance that nothing catches it.
+
+    - field: "grade: aspirational"
+      implication: >
+        A verification claim is meant but not currently checkable.
+      definition-review-requirement: >
+        Must examine each: is it honestly aspirational (no protocol exists)
+        or a reviewable claim missing its protocol?
+
+    - field: "blocking: false"
+      implication: >
+        A verification failure is informative but does not halt review.
+      definition-review-requirement: >
+        Should ask: would splitting into a blocking settled claim plus a
+        non-blocking aspirational claim be clearer?
+
+    - field: "certainty: working-assumption"
+      implication: >
+        A claim or directive is believed true but not committed to.
+      definition-review-requirement: >
+        Should confirm: is there a plan to settle or demote this, and does
+        the verification plate reflect the uncertainty?
+
+    - field: "certainty: deferred"
+      implication: >
+        A claim exists but its specifics are unresolved.
+      definition-review-requirement: >
+        Must confirm the deferral is intentional and a path to resolution
+        exists, or accept the indefinite deferral explicitly.
+
+    - field: "note: {kind: deferred-decision}"
+      implication: >
+        An acknowledged uncertainty hangs off a claim or directive.
+      definition-review-requirement: >
+        Should confirm a review: trigger exists on the note, or accept
+        explicitly that the deferral is indefinite.
+
+# ─────────────────────────────────────────────────────────────────────────────
+# OPEN QUESTIONS
+# Unresolved items that affect the format. Inherited from
+# provenance/spec-formats-landscape.md; listed here so practitioners
+# know where the format's edges are.
+# ─────────────────────────────────────────────────────────────────────────────
+
+open-questions:
+  - id: oq-format-location
+    question: >
+      Where does the format live? One file per spec? One directory per spec
+      with sections as files? Embedded as code annotations? Not yet decided.
+
+  - id: oq-type-system
+    question: >
+      Can we validate a spec for internal consistency (every intent claim
+      covered by verification, every external: context carrying a review
+      cadence) before implementation? No tooling exists yet.
+
+  - id: oq-guarantee-vs-demand
+    question: >
+      How do we distinguish a constraint this spec guarantees to children
+      (consumable as their context) from one it demands of them collectively?
+      No field captures this distinction yet.
+
+  - id: oq-aspirational-cadences
+    question: >
+      What do aspirational-claim review cadences look like in practice?
+      Promotion to reviewable or executable is structurally supported; the
+      discipline around when and how to promote is not yet specified.
+
+  - id: oq-sustained-use
+    question: >
+      What breaks under sustained use? Only answerable by specs aging in
+      real projects.

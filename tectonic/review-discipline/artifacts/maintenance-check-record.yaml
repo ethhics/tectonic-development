@@ -1,0 +1,39 @@
+# Artifact: Maintenance check record
+# Schema published by tectonic/review-discipline/maintenance-review
+# Filled in per scheduled maintenance check. One record per check
+# on one claim on one cadence date.
+
+check-of:
+  spec: <spec identifier>
+  claim: <claim identifier>
+  cadence: <quarterly, annually, custom>
+  scheduled-date: <the date this check was due>
+  actual-date: <the date the check was performed; may differ
+    if late>
+
+owner:
+  name: <the human who performed the check>
+  role: <shepherd | maintenance-owner | other declared role>
+
+checklist-version: <e.g., maintenance-checklist v0>
+
+walkthrough:
+  identification: <what was checked, when last checked>
+  the-check-itself: <reviewer's findings against each
+    applicable checklist question>
+  broader-observation: <any whole-spec concerns the reviewer
+    raised, even if the specific check passed>
+
+outcome:
+  finding: still-holds | no-longer-holds | cadence-wrong |
+    spec-drift-flagged
+  rationale: <one to three lines explaining the finding>
+
+follow-up:
+  - triggered-artifact: <modification, implementation review,
+      or other>
+    link: <identifier of the triggered artifact>
+    reason: <why this was triggered>
+  # Empty list is legitimate for still-holds outcomes.
+
+next-scheduled: <date of the next check, computed from cadence>

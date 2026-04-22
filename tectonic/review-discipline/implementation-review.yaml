@@ -1,0 +1,205 @@
+# spec: tectonic/review-discipline/implementation-review
+kind: feature
+status: proposed
+parent: tectonic/review-discipline
+publishes:
+  - tectonic/review-discipline/implementation-checklist (v0)
+  - tectonic/review-discipline/generation-record-schema
+  - tectonic/review-discipline/implementation-review-record
+    (filled per review)
+provenance:
+  - spec-formats-landscape.md
+  - tectonic-bootstrap.md
+  - survey of CodeRabbit, Qodo, Sonar, Conductor, Tessl, IIKit,
+    property-based testing literature (conversation)
+
+intent:
+  - claim: A spec that has been implemented produces a Generation
+      record — an artifact describing what code was produced, how,
+      against which spec, and with what results — which is
+      examined by a named human reviewer against the spec's
+      verification entries, and the reviewer records an
+      approve-or-reject verdict with rationale.
+    certainty: settled
+  - claim: Implementation review uses the spec's existing
+      verification grades (executable, reviewable, aspirational)
+      as its scaffolding. Executable verifications are checked
+      mechanically; reviewable ones receive human attestation;
+      aspirational ones are acknowledged as unchecked. The review
+      does not invent new checking mechanisms beyond what the
+      spec already declares.
+    certainty: settled
+  - claim: The review treats the generator as untrusted on the
+      specific task at hand, regardless of past performance. A
+      spot-check on one or two human-chosen claims, read
+      critically against the spec, is the irreducible anti-
+      circular-verification step.
+    certainty: settled
+    note:
+      kind: trade-off
+      detail: Trusting the generator's self-checks — whether its
+        tests, its claim-coverage analysis, or its scope review —
+        defeats the premise of the methodology. The spot-check is
+        the refusal to close that loop. It is slow and
+        unautomatable; that is the point.
+  - claim: Generation records apply regardless of whether code
+      was machine-generated, human-written, or a mix. The review
+      asks "does this code satisfy the spec"; authorship is
+      recorded in the generator field but does not change the
+      review's structure.
+    certainty: settled
+
+context:
+  - fact: Specs declare verification entries with explicit grades
+      (executable, reviewable, aspirational) and `blocking:` flags.
+      Implementation review consumes these.
+    guaranteed_by: tectonic/spec-format
+    enforcement: interface
+  - fact: Definition review verifies that verification grades are
+      honestly assigned — an executable claim has a real test,
+      an aspirational claim genuinely lacks a checking protocol,
+      etc. Implementation review relies on this being accurate.
+    guaranteed_by: tectonic/review-discipline/definition-review
+    enforcement: convention
+    # Coupled modification to definition-checklist in this session
+    # makes this check explicit rather than implicit.
+  - fact: Modification review, on apply, classifies which
+      downstream specs and code are dirtied. Code dirtied by an
+      applied modification must receive a new Implementation
+      review.
+    guaranteed_by: tectonic/review-discipline/modification-review
+    enforcement: convention
+  - fact: Definition review is defined and ratified. Implementation
+      review inherits its shepherd role, DISCUSS/COMMENT taxonomy,
+      approve/revise/withdraw verdicts, and record-as-artifact
+      pattern.
+    guaranteed_by: tectonic/review-discipline/definition-review
+    enforcement: convention
+
+constraints:
+  local:
+    - directive: Every implementation of an active spec — whether
+        the code was machine-generated, human-written, or a mix —
+        produces a Generation record that is reviewed and approved
+        before the code is considered to satisfy the spec.
+      certainty: settled
+    - directive: Implementation review proceeds in six steps:
+        (1) structural pre-pass, (2) executable verification,
+        (3) reviewable verification with human attestation,
+        (4) scope review, (5) human spot-check on one or more
+        claims chosen by the reviewer, (6) verdict. Steps 1-2 may
+        be agent-assisted; steps 3-5 require human judgment; step
+        6 is the shepherd's recorded decision.
+      certainty: settled
+    - directive: Failure of any executable verification entry
+        marked `blocking: true` halts the review before human
+        judgment is sought. Non-blocking executable failures are
+        recorded but do not gate review progress.
+      certainty: settled
+    - directive: Reviewable verifications require the reviewer to
+        attest yes/no against each such claim, with rationale
+        sufficient for a future reader to understand what was
+        checked and how.
+      certainty: settled
+    - directive: Scope review identifies code that maps to no
+        claim in the target spec. Such code is either removed,
+        justified via a modification to the spec, or recorded
+        as a finding.
+      certainty: settled
+    - directive: The spot-check step requires the human reviewer
+        to select at least one claim — by risk, complexity, or
+        judgment — and read the code critically against that
+        claim regardless of whether its verification says pass.
+        The selection method is the reviewer's; the requirement
+        that a spot-check occur is not.
+      certainty: settled
+      note:
+        kind: trade-off
+        detail: We considered structuring the spot-check (red-team
+          prompts, mutation testing, checklists of adversarial
+          probes). Rejected: formalizing the spot-check risks
+          turning it into another checkable box, defeating its
+          purpose. The human's unstructured judgment is what
+          catches what structure misses. This may change as
+          practice matures.
+    - directive: The Generation record persists after approval.
+        It does not archive. Status transitions follow the
+        lifecycle: proposed, approved, applied, superseded
+        (by a later implementation), invalidated (by a
+        modification to the target spec that dirties this code).
+      certainty: settled
+    - directive: When a modification to an active spec applies
+        and classifies existing code as dirtied, the prior
+        Generation record transitions to `invalidated` and a new
+        Implementation review is required before the code is
+        again considered to satisfy the spec. The new review
+        does not have to happen immediately — the spec may stand
+        unimplemented for a period — but code cannot be treated
+        as satisfying the spec until a fresh review completes.
+      certainty: settled
+    - directive: Agent-assisted pre-pass (steps 1-2) is permitted
+        and encouraged. Agent-only review is not permitted.
+        The human attestations (steps 3-5) and the verdict (step 6)
+        must be recorded by a named human.
+      certainty: settled
+    - directive: Issues raised by reviewers are classified as
+        DISCUSS (blocking) or COMMENT (advisory). Verdicts are
+        `approve`, `revise`, or `withdraw`. Every verdict and
+        every DISCUSS resolution is recorded in an Implementation
+        review record artifact.
+      certainty: settled
+
+verification:
+  - grade: reviewable
+    claim: Every implemented spec has a linked Generation record
+      identifying generator, context loaded, output paths, and
+      verification results.
+    review: audit on demand; spot-check quarterly
+  - grade: reviewable
+    claim: Every approved Generation record shows passing
+      executable verifications for all `blocking: true` claims in
+      the target spec.
+    review: audit on demand
+  - grade: reviewable
+    claim: Every approved Generation record includes human
+      attestation for every `grade: reviewable` claim in the
+      target spec, with rationale.
+    review: audit on demand
+  - grade: reviewable
+    claim: Every approved Generation record shows at least one
+      spot-check performed by the human reviewer, with the
+      claim chosen and the reviewer's finding recorded.
+    review: audit on demand
+  - grade: reviewable
+    claim: Code dirtied by an applied modification has its prior
+      Generation record transitioned to `invalidated`, and is
+      not treated as satisfying the spec until a new review
+      completes.
+    review: audit on demand
+  - grade: aspirational
+    claim: Spot-checks catch failure modes that automated
+      verification missed at a meaningful rate.
+    certainty: deferred
+    note:
+      kind: deferred-decision
+      detail: The spot-check is load-bearing if and only if it
+        actually finds things. Whether it does is an empirical
+        question we cannot answer until enough implementations
+        have been reviewed to measure. If spot-checks
+        consistently find nothing, either the generator is
+        unusually reliable (good, but suspicious) or reviewers
+        are not spot-checking seriously (the failure mode this
+        verification is designed to flag).
+  - grade: aspirational
+    claim: Human reviewers complete Implementation reviews
+      within a time budget proportional to the spec's size,
+      such that the review is not the bottleneck in delivery.
+    certainty: deferred
+
+plan:
+  status: drafting
+  approach: The implementation review instrument is published
+    as tectonic/review-discipline/implementation-checklist,
+    versioned separately. The generation record schema is
+    similarly published. The shepherd selects checklist depth
+    for the implementation's scope.

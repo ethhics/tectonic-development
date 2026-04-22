@@ -1,0 +1,31 @@
+# modification: <target-spec>/mod/<short-verb-led-name>
+kind: modification
+target: <spec-identifier>
+status: proposed | approved | applied | reverted | superseded
+predecessor: <prior modification, if this one supersedes one>
+provenance:
+  - <external references: ADRs, incidents, upstream modifications>
+
+rationale:
+  <prose: why this change, how it was discovered, what triggered
+   it. Thin rationales are legitimate; thick ones are legitimate.
+   Length tracks substance.>
+
+delta:
+  - op: add | modify | remove
+    target: <path into target spec: claim, plate, field>
+    from: <current value, if modify>
+    to: <new value, if add or modify>
+    # Multiple delta entries allowed; each is independently
+    # addressable by op-index.
+
+propagation:
+  dirtied:
+    - spec: <descendant>
+      claim: <which claim is affected>
+      resolution: <how the dirty is handled; usually a
+        coupled modification or explicit re-verification>
+  notified:
+    - spec: <descendant or related>
+      reason: <why this spec should know about the change>
+      surfaces-for: <optional: feeds into maintenance-review, etc.>

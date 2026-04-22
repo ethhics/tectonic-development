@@ -1,0 +1,62 @@
+# checklist: tectonic/review-discipline/modification-checklist (v0)
+# Use during Modification review of a modification artifact.
+
+target:
+  - Does the target spec exist and is it active?
+  - Is this modification against the current version of the target,
+    not a stale version?
+
+rationale:
+  - Is the rationale specific enough that a future reader can
+    understand why this change happened now, not just what it was?
+  - If the change is surprising (demotion, reversal, removal),
+    does the rationale name that explicitly?
+  - Does the rationale avoid conflating "what changed" with "why"?
+
+delta:
+  - Is each delta entry well-formed (op, target path, from/to where
+    applicable)?
+  - Does each delta target resolve to a real location in the target spec?
+  - For modify operations: does `from` accurately reflect the current
+    value in the target spec?
+  - For add operations: does the addition fit the plate it's being
+    added to, structurally and semantically?
+  - For remove operations: is the removal justified — is the claim
+    genuinely no longer true/needed, not just inconvenient?
+  - Are multiple related edits grouped into one modification rather
+    than fragmented, when they share a rationale?
+
+propagation:
+  - For each dirtied descendant: is the resolution plan real (a
+    coupled modification, an explicit re-verification, or a recorded
+    reason why no further action is needed)?
+  - For each notified spec: is the reason clear, and does the notified
+    spec actually need to know?
+  - Are there descendants the reviewer can identify that the author
+    missed? Graph traversal check: walk edges from the target to find
+    anyone depending on modified claims.
+  - Is close-the-deal triggered? (A parent spec that needs coupled
+    modification.)
+
+status and lifecycle:
+  - Is status `proposed` (the only legal incoming state for review)?
+  - If predecessor is set: does the predecessor resolve, and is this
+    modification genuinely superseding it (not just editing the same
+    claim for an unrelated reason)?
+
+honesty:
+  - Is the modification classified as non-cosmetic honestly? Would the
+    edits pass the "reader behaves identically" test and thus not
+    require review in the first place? (If yes, the modification
+    should be withdrawn; a cosmetic edit was written up as a
+    modification unnecessarily.)
+  - Is anything being smuggled in under an innocent rationale? A
+    claim whose wording change looks like a rephrase but shifts what
+    the spec commits to, a propagation plan that quietly omits a
+    descendant, etc.
+
+closeout:
+  - DISCUSS items, COMMENT items, verdict (approve / revise / withdraw).
+  - If approved: the modification applies, target spec's affected claims
+    receive last-modified-by: pointers, status transitions to applied.
+  - Shepherd confirms DISCUSS items resolved before applying.
