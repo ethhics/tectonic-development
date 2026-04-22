@@ -1,5 +1,7 @@
 # Tectonic Development
 
+This work is licensed under CC BY-SA 4.0. To view a copy of this license, visit https://creativecommons.org/licenses/by-sa/4.0/
+
 **The bootstrapping is still underway. *Everything* is subject to change!**
 
 We are uncovering better ways of building software by doing it and helping others do it. Through this work we have come to value:
