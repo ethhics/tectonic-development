@@ -7,7 +7,7 @@
 # rule a practitioner or tool needs to author, validate, or process a spec.
 #
 # It does not explain why the format takes the shape it does. That reasoning
-# lives in provenance/spec-formats-landscape.md.
+# lives in tectonic/spec-format.
 #
 # Usage notes:
 #   required     — the spec is malformed without it
@@ -717,39 +717,3 @@ honesty-valves:
       definition-review-requirement: >
         Should confirm a review: trigger exists on the note, or accept
         explicitly that the deferral is indefinite.
-
-# ─────────────────────────────────────────────────────────────────────────────
-# OPEN QUESTIONS
-# Unresolved items that affect the format. Inherited from
-# provenance/spec-formats-landscape.md; listed here so practitioners
-# know where the format's edges are.
-# ─────────────────────────────────────────────────────────────────────────────
-
-open-questions:
-  - id: oq-format-location
-    question: >
-      Where does the format live? One file per spec? One directory per spec
-      with sections as files? Embedded as code annotations? Not yet decided.
-
-  - id: oq-type-system
-    question: >
-      Can we validate a spec for internal consistency (every intent claim
-      covered by verification, every external: context carrying a review
-      cadence) before implementation? No tooling exists yet.
-
-  - id: oq-guarantee-vs-demand
-    question: >
-      How do we distinguish a constraint this spec guarantees to children
-      (consumable as their context) from one it demands of them collectively?
-      No field captures this distinction yet.
-
-  - id: oq-aspirational-cadences
-    question: >
-      What do aspirational-claim review cadences look like in practice?
-      Promotion to reviewable or executable is structurally supported; the
-      discipline around when and how to promote is not yet specified.
-
-  - id: oq-sustained-use
-    question: >
-      What breaks under sustained use? Only answerable by specs aging in
-      real projects.

@@ -6,11 +6,7 @@ publishes:
   - tectonic/review-discipline/modification-checklist (v0)
   - tectonic/review-discipline/modification-record (filled per review)
 provenance:
-  - spec-formats-landscape.md
-  - tectonic-bootstrap.md
   - survey of OpenSpec, Kiro, Spec Kit, ADR traditions, Kafka KIPs
-    (conversation)
-  - definition-review ratification session
 
 intent:
   - claim: A change to an active spec that alters any claim's

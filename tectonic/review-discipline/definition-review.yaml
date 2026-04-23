@@ -3,11 +3,9 @@ kind: feature
 status: active
 parent: tectonic/review-discipline
 provenance:
-  - spec-formats-landscape.md
-  - tectonic-bootstrap.md
   - RFC 4858 (shepherd role; shepherd write-up pattern;
     DISCUSS vs COMMENT distinction)
-  - survey of Tessl, Kiro, Spec Kit, OpenSpec (conversation)
+  - survey of Tessl, Kiro, Spec Kit, OpenSpec
 publishes:
   - tectonic/review-discipline/definition-checklist (v0)
 

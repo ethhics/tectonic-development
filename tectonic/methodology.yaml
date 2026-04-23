@@ -2,9 +2,7 @@
 kind: feature
 status: active
 provenance:
-  - tectonic-development.md
-  - spec-formats-landscape.md
-  - the working sessions that produced both
+  - Review of The Agile Manifesto in 2026; asking how its creators would write it now
 
 intent:
   - claim: Teams building software with AI agents can produce reliable,

@@ -3,7 +3,7 @@ kind: feature
 status: active
 parent: tectonic/methodology
 provenance:
-  - spec-formats-landscape.md
+  - survey of existing spec formats
 publishes:
   - tectonic/spec-format-reference (v0)
 
@@ -23,8 +23,6 @@ intent:
 
 context:
   - fact: The format is defined in the published spec-format-reference artifact.
-      The reasoning behind format choices lives in spec-formats-landscape.md
-      (provenance); it is not a normative reference.
     guaranteed_by: tectonic/methodology
     enforcement: convention
   - fact: Implementations (parsers, renderers, dirty-propagation

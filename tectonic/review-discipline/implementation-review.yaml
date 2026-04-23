@@ -8,10 +8,8 @@ publishes:
   - tectonic/review-discipline/implementation-review-record
     (filled per review)
 provenance:
-  - spec-formats-landscape.md
-  - tectonic-bootstrap.md
   - survey of CodeRabbit, Qodo, Sonar, Conductor, Tessl, IIKit,
-    property-based testing literature (conversation)
+    property-based testing literature
 
 intent:
   - claim: A spec that has been implemented produces a Generation

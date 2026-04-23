@@ -9,9 +9,7 @@ publishes:
   - tectonic/review-discipline/maintenance-checklist (v0)
 provenance:
   - survey of SOC 2 evidence review, documentation rot practice,
-    drift detection, assume-guarantee monitoring (conversation)
-  - tectonic-bootstrap.md
-  - implementation-review ratification session
+    drift detection, assume-guarantee monitoring
 
 intent:
   - claim: Claims in active specs that declare a review cadence —
