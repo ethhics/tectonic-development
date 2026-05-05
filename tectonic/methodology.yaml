@@ -57,14 +57,13 @@ constraints:
           2 years from now, so we will not bother trying to invent a tool for it.
 
 verification:
-  - grade: reviewable
-    claim: Reviewers evaluate specs authored under Tectonic against their intent,
+  - claim: Reviewers evaluate specs authored under Tectonic against their intent,
       without first reading implementation code.
+    grade: reviewable
     review: when a team has used the methodology for ≥3 months
 
   - claim: Generation and modification artifacts produced under Tectonic
-      reference the specs they implement;
-      specs are not bypassed in practice.
+      reference the specs they implement; specs are not bypassed in practice.
     grade: reviewable
     review: quarterly, on a sample of recent generation/modification records
 
@@ -80,8 +79,7 @@ verification:
     note:
       kind: deferred-decision
       detail: No measurement framework exists yet; the open question
-        is whether specs remain useful 12-24 months after authoring
-        without rewrite.
+        is whether specs remain useful 12-24 months after authoring.
       review: when the first specs reach 12 months in real use
 
   - claim: AI-generated code under Tectonic produces fewer defects
@@ -90,20 +88,18 @@ verification:
     certainty: deferred
     note:
       kind: deferred-decision
-      detail: No measurement framework exists yet. Asserting this
-        without instrumentation would be exactly the overclaim the
-        methodology warns against.
+      detail: No measurement framework exists yet; like the methodology requests,
+        we should only mark this as an aspiration until we can measure it.
       review: when measurement infrastructure exists or is decided against
 
-  - claim: Specs and code under Tectonic remain coherent as the
-      codebase grows; spec changes propagate without ad-hoc rewrites.
+  - claim: Specs and code under Tectonic remain coherent as the codebase grows;
+      spec changes propagate without ad-hoc rewrites.
     grade: aspirational
     certainty: deferred
     note:
       kind: deferred-decision
-      detail: The maintainability claim is currently the fuzziest of
-        the three code dimensions. Sharpen the claim or accept it as
-        directional once a long-running Tectonic codebase exists.
+      detail: Our maintainability claim is very fuzzy and unverifiable
+        until we have a mature codebase to test with.
       review: when a Tectonic codebase reaches 12 months
 
 plan:
