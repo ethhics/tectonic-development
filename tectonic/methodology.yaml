@@ -5,76 +5,108 @@ provenance:
   - Review of The Agile Manifesto in 2026; asking how its creators would write it now
 
 intent:
-  - claim: Teams building software with AI agents can produce reliable,
-      reviewable, maintainable work at scale.
-    certainty: settled
-  - claim: The valuable human skills are deciding what to build and
-      verifying what was built; the middle delegates downward.
-    certainty: settled
-  - claim: Context, specifications, and verification are assets, not tax.
-    certainty: settled
-  - claim: The methodology will be meaningfully obsolete within a few
-      years; its job is to be useful now and honestly superseded later.
-    certainty: settled
-    note:
-      kind: trade-off
-      detail: Optimizing for the 2026 moment over longevity. A
-        different methodology would invest in being durable; this one
-        invests in being right for now.
+  - claim: Teams using Tectonic create specs that are load-bearing,
+      easy to evaluate, and which will age well as artifacts.
+
+  - claim: AI-generated code implementing Tectonic specs is reliable,
+      reviewable, and maintainable at scale.
 
 context:
-  - fact: AI coding agents are the dominant generators of software
-      in scope for this methodology.
-    guaranteed_by: given
+  - fact: AI coding agents are becoming the dominant generators of software.
+    guaranteed_by: external:industry-state
     enforcement: none
     note:
       kind: limitation
-      detail: If the generator/reviewer relationship inverts again —
-        humans regaining the generation role, or agents becoming
-        reliable enough not to need review — the methodology's
-        premises fail.
-  - fact: Agents are confident confabulators whose output requires
-      verification.
-    guaranteed_by: given
+      detail: If the generator/reviewer relationship inverts again,
+        having humans regain the generator role,
+        or having agents which may not need external review,
+        then the Tectonic method is called into question.
+      review: annually
+
+  - fact: Current AI agents confabulate confidently when uncertain.
+    guaranteed_by: external:current-agent-capabilities
     enforcement: none
+    note:
+      kind: limitation
+      detail: It is possible that a wholly new class of model can void this fact,
+        and necessitate a complete review of our methodology.
+      review: annually
 
 constraints:
   local:
-    - directive: The methodology must be falsifiable. Claims should
-        be stated sharply enough that they can be wrong.
-      certainty: settled
-    - directive: The methodology must not accrete ceremony. Every
-        primitive must earn its place by solving a problem that
-        comments or convention could not.
-      certainty: settled
+    - directive: Each claim in the methodology must be stated
+        sharply enough that it can be wrong.
+
+    - directive: The methodology must not accrete ceremony.
+        Every primitive must earn its place by solving a problem
+        that comments or convention could not.
+
     - directive: The methodology references external traditions
-        (ADRs, RFCs, formal methods) rather than subsuming them.
-      certainty: settled
+        (ADRs, RFCs, formal methods) rather than replacing them.
+
+    - directive: The methodology must not assert what it hasn't shown.
+        Aspirations, deferred decisions, and unenforced assumptions
+        are marked, not implied.
+
+    - directive: The methodology must not invest in longevity at the
+        expense of present usefulness.
+      note:
+        kind: trade-off
+        detail: We are optimizing for the moment instead of
+          optimizing for durability. We can not forecast the landscape
+          2 years from now, so we will not bother trying to invent a tool for it.
 
 verification:
   - grade: reviewable
-    claim: Practitioners using Tectonic produce specs that reviewers
-      can evaluate without needing to read implementation code first.
+    claim: Reviewers evaluate specs authored under Tectonic against their intent,
+      without first reading implementation code.
     review: when a team has used the methodology for ≥3 months
-  - grade: aspirational
-    claim: Tectonic reduces AI-generated defect rates compared to
-      unstructured prompting at the same scale of work.
+
+  - claim: Generation and modification artifacts produced under Tectonic
+      reference the specs they implement;
+      specs are not bypassed in practice.
+    grade: reviewable
+    review: quarterly, on a sample of recent generation/modification records
+
+  - claim: Generated code under Tectonic is reviewable against its
+      spec without recourse to other artifacts.
+    grade: reviewable
+    review: when a team has used the methodology for ≥3 months
+
+  - claim: Specs authored under Tectonic age into maintained assets
+      rather than stale artifacts.
+    grade: aspirational
+    certainty: deferred
+    note:
+      kind: deferred-decision
+      detail: No measurement framework exists yet; the open question
+        is whether specs remain useful 12-24 months after authoring
+        without rewrite.
+      review: when the first specs reach 12 months in real use
+
+  - claim: AI-generated code under Tectonic produces fewer defects
+      than unstructured prompting at the same scale of work.
+    grade: aspirational
     certainty: deferred
     note:
       kind: deferred-decision
       detail: No measurement framework exists yet. Asserting this
         without instrumentation would be exactly the overclaim the
         methodology warns against.
-  - grade: aspirational
-    claim: Specs written in this format age better than ad-hoc docs
-      in adjacent methodologies.
+      review: when measurement infrastructure exists or is decided against
+
+  - claim: Specs and code under Tectonic remain coherent as the
+      codebase grows; spec changes propagate without ad-hoc rewrites.
+    grade: aspirational
     certainty: deferred
-  - grade: reviewable
-    claim: The methodology can describe itself. (This document.)
-    review: on each major revision to the format
+    note:
+      kind: deferred-decision
+      detail: The maintainability claim is currently the fuzziest of
+        the three code dimensions. Sharpen the claim or accept it as
+        directional once a long-running Tectonic codebase exists.
+      review: when a Tectonic codebase reaches 12 months
 
 plan:
   status: ongoing
-  approach: iterate the format against real examples; codify the
-    review discipline when the format stops moving
-  next: codify review discipline; instrument the aspirational claims
+  approach: iterate the methodology against real examples
+  next: revise the methodology as we get more feedback
