@@ -1,6 +1,6 @@
 # spec: tectonic/review-discipline
 kind: feature
-status: active
+status: proposed
 parent: tectonic/methodology
 
 intent:

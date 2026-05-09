@@ -1,6 +1,6 @@
 # spec: tectonic/review-discipline/definition-review
 kind: feature
-status: active
+status: proposed
 parent: tectonic/review-discipline
 provenance:
   - RFC 4858 (shepherd role; shepherd write-up pattern;

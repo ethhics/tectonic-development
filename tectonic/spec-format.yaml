@@ -1,6 +1,6 @@
 # spec: tectonic/spec-format
 kind: feature
-status: active
+status: proposed
 parent: tectonic/methodology
 provenance:
   - survey of existing spec formats
