@@ -329,6 +329,13 @@ plates:
     required: true
 
     fields:
+      claim:
+        type: string
+        required: true
+        description: >
+          The verification statement. Written to be checkable against the
+          intent claim it addresses.
+
       grade:
         type: enum
         required: true
@@ -346,13 +353,6 @@ plates:
             Honest acknowledgment of the gap. Aspirational verifications
             should either carry a path to promotion or explicit acceptance
             that they remain directional.
-
-      claim:
-        type: string
-        required: true
-        description: >
-          The verification statement. Written to be checkable against the
-          intent claim it addresses.
 
       id:
         type: string

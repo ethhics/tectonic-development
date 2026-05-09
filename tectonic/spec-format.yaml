@@ -12,19 +12,19 @@ intent:
       layered plates — intent, context, constraints, verification,
       plan — with honest mechanisms for origin, enforcement, and
       uncertainty.
-    certainty: settled
+
   - claim: The format supports composition across scope (containment,
       sutures, policy, utilities) and graded propagation (dirty vs
       notified) when the graph changes.
-    certainty: settled
+
   - claim: The format admits thin specs. A three-line canonical spec
       is legal.
-    certainty: settled
 
 context:
   - fact: The format is defined in the published spec-format-reference artifact.
     guaranteed_by: tectonic/methodology
     enforcement: convention
+
   - fact: Implementations (parsers, renderers, dirty-propagation
       tooling) do not yet exist.
     guaranteed_by: given
@@ -39,13 +39,13 @@ constraints:
   local:
     - directive: Every structural addition must be justified by a
         real failure mode in a real example, not by anticipated need.
-      certainty: settled
       note:
         kind: trade-off
         detail: Risks being too reactive; may miss additions that
           would prevent problems we haven't hit yet. Accepted
           because the alternative (speculative structure) has
           historically killed spec methodologies.
+
     - directive: The format must distinguish structural content
         (what a spec contains) from procedural content (what happens
         between specs over time). Procedural primitives are explicit
@@ -58,17 +58,19 @@ constraints:
           once more procedural primitives land.
 
 verification:
-  - grade: reviewable
-    claim: The format has been tested against meaningfully different
+  - claim: The format has been tested against meaningfully different
       examples (in-process tool with siblings and utility; published
       API with external consumers; self-description).
+    grade: reviewable
     review: on each new stress-test example
-  - grade: reviewable
-    claim: Every field in the format earns its place by resolving a
+
+  - claim: Every field in the format earns its place by resolving a
       failure mode some earlier version couldn't express.
+    grade: reviewable
     review: on each format revision
-  - grade: aspirational
-    claim: The format is learnable by a practitioner in under a day.
+
+  - claim: The format is learnable by a practitioner in under a day.
+    grade: aspirational
     certainty: deferred
 
 plan:

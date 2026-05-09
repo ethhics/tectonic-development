@@ -23,18 +23,18 @@ context:
     enforcement: none
 
 constraints:
-  - directive: A Spec Shepherd is assigned for every review,
-      accountable for the review occurring and being recorded.
-    certainty: settled
+  local:
+    - directive: A Spec Shepherd is assigned for every review,
+        accountable for the review occurring and being recorded.
 
 verification:
-  - grade: aspirational
-    claim: Reviewers trained in the discipline produce consistent
+  - claim: Reviewers trained in the discipline produce consistent
       judgments on the same spec.
+    grade: aspirational
     certainty: deferred
 
 plan:
-  status: not-started
+  status: ongoing
   approach: begin after the spec format stabilizes further; draft
     protocols for the specific review types the format already names
     (external-context cadence, aspirational promotion, limitation

@@ -14,11 +14,11 @@ intent:
       examined by a named human reviewer against its structural
       claims, and the reviewer has recorded an approve-or-reject
       verdict with rationale.
-    certainty: settled
+
   - claim: Definition review is the quality gate between
       inspirational and canonical. A spec cannot reach status
       `active` without it.
-    certainty: settled
+
   - claim: The review is proportional to the spec. A three-line
       thin spec gets a checklist-level review; a load-bearing
       top-level spec gets a structured write-up.
@@ -28,11 +28,11 @@ intent:
       detail: Sharp rules for depth-by-kind don't exist yet.
         The floor is "a human approved and left a trace." The
         ceiling will come from experience.
+
   - claim: Every honesty valve the spec uses — `enforcement: none`,
       `grade: aspirational`, `blocking: false`, `note:` with
       a review trigger — is individually examined by the reviewer
       and resolved or explicitly accepted.
-    certainty: settled
     note:
       kind: trade-off
       detail: This is the load-bearing commitment of the whole
@@ -47,10 +47,12 @@ context:
       and the honesty valves that this review examines.
     guaranteed_by: tectonic/spec-format
     enforcement: convention
+
   - fact: A Spec Shepherd role exists, accountable for the
       review occurring and being recorded.
     guaranteed_by: tectonic/review-discipline
     enforcement: convention
+
   - fact: Reviewers have access to parent specs, sutured
       siblings, and referenced ADRs when conducting the review.
     guaranteed_by: given
@@ -61,7 +63,6 @@ constraints:
     - directive: At least one human reviewer, who is not the
         spec author, must approve a spec before its status
         changes from `proposed` to `active`.
-      certainty: settled
       note:
         kind: limitation
         detail: For solo developers or teams of one, the
@@ -71,10 +72,10 @@ constraints:
           after a defined interval, and reviews as if unfamiliar.
           This is weaker than peer review; the limitation is
           acknowledged rather than papered over.
+
     - directive: Agent-assisted pre-pass review is permitted and
         encouraged for structural checks. Agent-only review is
         not permitted.
-      certainty: settled
       note:
         kind: trade-off
         detail: Agents are well suited to checking "every claim
@@ -84,45 +85,49 @@ constraints:
           force multiplier; using them for the second reinstates
           the confident-confabulator problem the methodology
           exists to escape.
+
     - directive: Issues raised by reviewers are classified as
         DISCUSS (blocking; must be resolved before status change)
         or COMMENT (advisory; author decides whether to address).
         Every DISCUSS resolution is recorded.
-      certainty: settled
+
     - directive: Review verdicts are one of `approve`, `revise`,
         or `withdraw`. `revise` is a temporary rejection pending
         author changes; `withdraw` is a permanent rejection and
         terminates the spec's lifecycle. Every verdict is
         recorded with rationale.
-      certainty: settled
+
     - directive: The review produces a written record that
         survives the review session and is linked from the spec
         via provenance.
-      certainty: settled
 
 verification:
-  - grade: reviewable
-    claim: Every spec in status `active` has a linked review
+  - claim: Every spec in status `active` has a linked review
       record identifying reviewer, date, spec version, and verdict.
+    grade: reviewable
     review: audit on demand; spot-check quarterly
-  - grade: reviewable
-    claim: Every honesty valve present in the spec is addressed
+
+  - claim: Every honesty valve present in the spec is addressed
       in the review record — either resolved or accepted with
       written rationale.
+    grade: reviewable
     review: spot-check quarterly
-  - grade: reviewable
-    claim: No spec reached `active` without at least one
+
+  - claim: No spec reached `active` without at least one
       human-authored approval (or, for solo-developer specs, a
       recorded time-separated self-review).
+    grade: reviewable
     review: audit on demand
-  - grade: reviewable
-    claim: Every spec with status `withdrawn` has a recorded
+
+  - claim: Every spec with status `withdrawn` has a recorded
       review verdict of `withdraw` with rationale.
+    grade: reviewable
     review: audit on demand
-  - grade: aspirational
-    claim: Review ceremony is proportional to spec ceremony.
+
+  - claim: Review ceremony is proportional to spec ceremony.
       Reviewer ceremony meaningfully above the spec's ceremony
       level is rare and, when it occurs, is justified.
+    grade: aspirational
     certainty: deferred
     note:
       kind: deferred-decision
@@ -130,9 +135,10 @@ verification:
         observe the distribution. Promoted from a constraint
         to an aspirational claim because "proportional" is
         directional, not operational.
-  - grade: aspirational
-    claim: Two independent reviewers produce substantively the
+
+  - claim: Two independent reviewers produce substantively the
       same verdict on the same spec.
+    grade: aspirational
     certainty: deferred
     note:
       kind: deferred-decision

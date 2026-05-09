@@ -88,8 +88,9 @@ verification:
     certainty: deferred
     note:
       kind: deferred-decision
-      detail: No measurement framework exists yet; like the methodology requests,
-        we should only mark this as an aspiration until we can measure it.
+      detail: No measurement framework exists yet. Asserting improvement without
+        measurement would be exactly the kind of overclaim the methodology
+        exists to prevent.
       review: when measurement infrastructure exists or is decided against
 
   - claim: Specs and code under Tectonic remain coherent as the codebase grows;
