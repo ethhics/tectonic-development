@@ -8,72 +8,99 @@ publishes:
   - tectonic/spec-format-reference (v0)
 
 intent:
-  - claim: A specification format exists that treats a spec as
-      layered plates — intent, context, constraints, verification,
-      plan — with honest mechanisms for origin, enforcement, and
-      uncertainty.
+  - claim: A specification format exists that partitions spec content
+      into plates — intent, context, constraints, verification, plan —
+      each governed by a distinct force and each with its own rate of change,
+      owners, and failure modes.
 
-  - claim: The format supports composition across scope (containment,
-      sutures, policy, utilities) and graded propagation (dirty vs
-      notified) when the graph changes.
+  - claim: The format records epistemic status inside every plate,
+      so that authors are never forced to portray false confidence where there is uncertainty.
 
-  - claim: The format admits thin specs. A three-line canonical spec
-      is legal.
+  - claim: The format composes specs across multiple kinds of relationship,
+      with changes propagating in graded form
+      so the blast radius of a change matches the kind of relationship it traveled through.
+
+  - claim: The format admits thin specs.
+      The smallest legal spec is four lines.
 
 context:
-  - fact: The format is defined in the published spec-format-reference artifact.
-    guaranteed_by: tectonic/methodology
-    enforcement: convention
-
-  - fact: Implementations (parsers, renderers, dirty-propagation
-      tooling) do not yet exist.
-    guaranteed_by: given
+  - fact: Spec content responds to different forces.
+      Why a system exists shifts when stakeholders rethink the goal.
+      The world around a system shifts independently of the system.
+      Commitments shift by deliberate decision.
+      Measurement of success shifts as measurement infrastructure catches up.
+      The current working approach shifts constantly.
+      Putting all these types of content into one undifferentiated spec document
+      forces them to share an ownership model, a change cadence,
+      and a review treatment they do not actually share.
+    guaranteed_by: external:practice-experience
     enforcement: none
     note:
       kind: limitation
-      detail: The format describes a structure that humans can
-        author and review but machines cannot yet validate. A
-        spec-level "type system" is an open question.
+      detail: This is the load-bearing premise of the format.
+        If it turns out that our partition of spec content does not reflect reality,
+        and that some types of content do move together and have the same ownership,
+        then our partitioned specs are just ceremonial, and therefore worthless.
+        The methodology's verification of the format against real-world examples
+        is the path by which we continually confirm this premise.
+      review: on each format revision
+
+  - fact: Specs persist beyond their authors,
+      the immediate problems that produced them,
+      and often the people now reading them.
+      A spec that cannot age honestly turns into either a lie or a stale artifact.
+    guaranteed_by: external:industry-practice
+    enforcement: none
 
 constraints:
   local:
-    - directive: Every structural addition must be justified by a
-        real failure mode in a real example, not by anticipated need.
+    - directive: Every structural addition to the format must be justified
+        by a real failure mode in a real example, not by anticipated need.
       note:
         kind: trade-off
-        detail: Risks being too reactive; may miss additions that
-          would prevent problems we haven't hit yet. Accepted
-          because the alternative (speculative structure) has
-          historically killed spec methodologies.
+        detail: This reactive approach means going through growing pains
+          that could have been avoided with extra planning and thought,
+          but we all must heed the call of Worse Is Better.
 
-    - directive: The format must distinguish structural content
-        (what a spec contains) from procedural content (what happens
-        between specs over time). Procedural primitives are explicit
-        when named.
-      certainty: working-assumption
-      note:
-        kind: deferred-decision
-        detail: Emerged in the second round of stress-testing. The
-          distinction may want its own section in the methodology
-          once more procedural primitives land.
+    - directive: The format must distinguish structural content (what a spec contains)
+        from procedural content (what happens between specs over time).
+        Procedural primitives are explicit when named.
+
+    - directive: Each plate must represent a force genuinely distinct from the others.
+        A proposal to add, merge, or remove plates must demonstrate the distinction, or lack thereof,
+        in rate of change, ownership, and/or failure modes.
+
+    - directive: The format must let authors record uncertainty
+        inside the plate where the uncertain content belongs,
+        so epistemic status never forces content into the wrong plate.
+
+    - directive: Misplacement of content into the wrong plate is a structural error, not a stylistic preference.
+        The format must keep the plate-distinction sharp enough that misplacement can be flagged in review.
 
 verification:
-  - claim: The format has been tested against meaningfully different
-      examples (in-process tool with siblings and utility; published
-      API with external consumers; self-description).
+  - claim: The format is validated against meaningfully different examples as the format evolves —
+      different kinds of specs, different composition patterns, different failure modes.
     grade: reviewable
     review: on each new stress-test example
 
-  - claim: Every field in the format earns its place by resolving a
-      failure mode some earlier version couldn't express.
+  - claim: Every field in the format earns its place
+      by resolving a failure mode some earlier version couldn't express.
+    grade: reviewable
+    review: on each format revision
+
+  - claim: Every procedural primitive in the format is explicitly named and categorized as procedural,
+      not embedded in a structural plate.
     grade: reviewable
     review: on each format revision
 
   - claim: The format is learnable by a practitioner in under a day.
     grade: aspirational
     certainty: deferred
+    note:
+      kind: deferred-decision
+      detail: Promotes to reviewable when training materials exist
+        and have been used enough to observe typical onboarding time.
 
 plan:
   status: stable-for-now
-  approach: hold structure; evolve procedural primitives as examples
-    surface them
+  approach: hold structure; evolve procedural primitives as examples surface them
