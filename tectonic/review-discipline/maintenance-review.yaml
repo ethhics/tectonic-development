@@ -3,7 +3,7 @@ kind: feature
 status: proposed
 parent: tectonic/review-discipline
 publishes:
-  - tectonic/review-discipline/maintenance-schedule-schema
+  - tectonic/review-discipline/maintenance-schedule-schema (v0)
   - tectonic/review-discipline/maintenance-check-record
     (filled per check)
   - tectonic/review-discipline/maintenance-checklist (v0)

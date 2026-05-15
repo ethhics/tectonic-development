@@ -139,13 +139,24 @@ top-level-fields:
       rather than a Modification artifact.
 
   publishes:
-    type: list of artifact identifiers
+    type: list of artifact identifiers, each optionally suffixed with a version
     required: false
     description: >
       Artifacts this spec is responsible for maintaining — checklists,
       schemas, reference documents, record templates. A spec's published
       artifacts are notified when the spec changes and dirtied when the
       spec changes in ways that affect the artifact's content.
+
+      When the spec reaches status `active`, every artifact in its
+      `publishes:` list is ratified at the declared version as part of
+      that spec's definition review. No separate ratification step is
+      required for the artifact document; the review of the publishing
+      spec covers the contract the artifact concretizes. A change to an
+      artifact's shape is a change to a claim the publishing spec makes
+      about it, and goes through Modification review on that spec.
+
+      Versioning rules, syntax, and policies are left undefined in this
+      spec format.
 
 # ─────────────────────────────────────────────────────────────────────────────
 # PLATES

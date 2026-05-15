@@ -45,10 +45,12 @@ context:
     guaranteed_by: tectonic/spec-format
     enforcement: convention
 
-  - fact: The modification artifact schema is published as a
-      Tectonic artifact (location and governance mechanism:
-      open question), defining fields target, rationale, delta,
-      propagation, status, provenance, predecessor.
+  - fact: The modification artifact schema is published by this
+      spec (see `publishes:`), defining fields target, rationale,
+      delta, propagation, status, provenance, predecessor. As with
+      any published artifact, ratification of this spec ratifies
+      the schema at the declared version; changes to its shape go
+      through Modification review on this spec.
     guaranteed_by: tectonic/review-discipline/modification-review
     enforcement: convention
 

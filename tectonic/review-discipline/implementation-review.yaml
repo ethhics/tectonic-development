@@ -4,7 +4,7 @@ status: proposed
 parent: tectonic/review-discipline
 publishes:
   - tectonic/review-discipline/implementation-checklist (v0)
-  - tectonic/review-discipline/generation-record-schema
+  - tectonic/review-discipline/generation-record-schema (v0)
   - tectonic/review-discipline/implementation-review-record
     (filled per review)
 provenance:
